@@ -6,4 +6,4 @@ create table courier
 
 insert into courier
 values (1, 'One man delivery'),
-       (2, 'Two man delivery');
+       (2, 'Two men delivery');

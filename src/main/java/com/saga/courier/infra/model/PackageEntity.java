@@ -4,6 +4,8 @@ import com.saga.courier.infra.model.enums.ShipmentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity(name = "Package")
 @Getter
 @Setter
@@ -22,4 +24,8 @@ public class PackageEntity {
     CourierEntity courier;
     @Enumerated(EnumType.STRING)
     ShipmentStatus shipmentStatus;
+    @OneToOne
+    @JoinColumn(name = "merchant_inventory_id", referencedColumnName = "merchant_inventory_id")
+    MerchantProductEntity product;
+    LocalDateTime courierAssignedAt;
 }

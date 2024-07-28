@@ -1,0 +1,1 @@
+alter table package add column if not exists courier_assigned_at timestamp;
