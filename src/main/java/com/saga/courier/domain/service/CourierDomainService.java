@@ -3,6 +3,7 @@ package com.saga.courier.domain.service;
 import com.saga.courier.domain.in.CourierDomainServiceApi;
 import com.saga.courier.domain.model.Package;
 import com.saga.courier.domain.model.enums.Courier;
+import com.saga.courier.domain.model.enums.ShipmentDomainStatus;
 import com.saga.courier.domain.out.CourierRepositoryApi;
 import lombok.RequiredArgsConstructor;
 
@@ -13,6 +14,9 @@ public class CourierDomainService implements CourierDomainServiceApi {
 
     @Override
     public void assignCourierToShipment(Package shipment) {
+        if (!shipment.status().equals(ShipmentDomainStatus.CREATED)){
+            return;
+        }
         Package aPackage = courierRepositoryApi.createPackage(shipment);
         // assign courier (bulky)
         Courier courier;
