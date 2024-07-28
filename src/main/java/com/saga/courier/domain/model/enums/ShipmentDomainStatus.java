@@ -1,6 +1,6 @@
-package com.saga.courier.infra.model.enums;
+package com.saga.courier.domain.model.enums;
 
-public enum ShipmentStatus {
+public enum ShipmentDomainStatus {
     CREATED,
     DELIVERED,
     IN_DELIVERY,

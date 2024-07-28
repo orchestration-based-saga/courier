@@ -1,6 +1,6 @@
-package com.saga.courier.infra.model.enums;
+package com.saga.courier.application.messaging.api.enums;
 
-public enum ShipmentStatus {
+public enum ShipmentState {
     CREATED,
     DELIVERED,
     IN_DELIVERY,

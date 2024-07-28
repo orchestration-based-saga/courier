@@ -13,9 +13,9 @@ import lombok.*;
 public class PackageEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    String packageId;
     Integer shipmentId;
+    Integer itemId;
     String orderId;
     @OneToOne
     @JoinColumn(name = "courier_id", referencedColumnName = "id")
