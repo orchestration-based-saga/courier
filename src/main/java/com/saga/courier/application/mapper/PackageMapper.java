@@ -1,6 +1,7 @@
 package com.saga.courier.application.mapper;
 
 import com.saga.courier.application.controller.api.response.PackageResponse;
+import com.saga.courier.application.messaging.UpdateShipmentStatus;
 import com.saga.courier.application.messaging.api.ShipmentRequest;
 import com.saga.courier.application.messaging.api.enums.ShipmentState;
 import com.saga.courier.domain.model.Package;
@@ -30,4 +31,9 @@ public interface PackageMapper {
     List<PackageResponse> toResponse(List<Package> aPackage);
 
     ShipmentDomainStatus toDomain(ShipmentState state);
+
+    ShipmentState toMessage(ShipmentDomainStatus status);
+
+    @Mapping(target = "status", source = "domainStatus")
+    UpdateShipmentStatus toMessage(String packageId, ShipmentDomainStatus domainStatus);
 }

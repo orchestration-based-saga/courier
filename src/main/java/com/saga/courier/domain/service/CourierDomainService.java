@@ -5,6 +5,7 @@ import com.saga.courier.domain.model.Package;
 import com.saga.courier.domain.model.enums.Courier;
 import com.saga.courier.domain.model.enums.ShipmentDomainStatus;
 import com.saga.courier.domain.out.CourierRepositoryApi;
+import com.saga.courier.domain.out.ShipmentProducerApi;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.Optional;
 public class CourierDomainService implements CourierDomainServiceApi {
 
     private final CourierRepositoryApi courierRepositoryApi;
+    private final ShipmentProducerApi shipmentProducerApi;
 
     @Override
     public void assignCourierToShipment(Package shipment) {
@@ -46,6 +48,7 @@ public class CourierDomainService implements CourierDomainServiceApi {
         Package aPackage = maybePackage.get();
         aPackage = aPackage.updateStatus(status);
         courierRepositoryApi.upsertPackage(aPackage);
+        shipmentProducerApi.updateShipment(aPackage);
         return true;
     }
 

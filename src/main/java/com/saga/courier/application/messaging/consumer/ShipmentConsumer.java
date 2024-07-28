@@ -1,4 +1,4 @@
-package com.saga.courier.application.messaging;
+package com.saga.courier.application.messaging.consumer;
 
 import com.saga.courier.application.mapper.PackageMapper;
 import com.saga.courier.application.messaging.api.ShipmentRequest;
