@@ -9,6 +9,8 @@ import com.saga.courier.infra.model.enums.ShipmentStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(uses = CourierEntityMapper.class)
 public interface PackageEntityMapper {
 
@@ -21,6 +23,8 @@ public interface PackageEntityMapper {
 
     @Mapping(target = "status", source = "shipmentStatus")
     Package toDomain(PackageEntity packageEntity);
+
+    List<Package> toDomain(List<PackageEntity> packageEntity);
 
     Product toDomain(MerchantProductEntity productEntity);
 

@@ -7,6 +7,8 @@ import com.saga.courier.domain.model.enums.ShipmentDomainStatus;
 import com.saga.courier.domain.out.CourierRepositoryApi;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 public class CourierDomainService implements CourierDomainServiceApi {
 
@@ -27,6 +29,11 @@ public class CourierDomainService implements CourierDomainServiceApi {
         }
         courierRepositoryApi.assignCourier(aPackage, courier);
 
+    }
+
+    @Override
+    public List<Package> getPackagesForCourier(Integer courierId) {
+        return courierRepositoryApi.findPackagesOfCourier(courierId);
     }
 
     private Courier assignOneManDeliveryCourier() {

@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -35,5 +36,10 @@ public class CourierRepository implements CourierRepositoryApi {
         packageEntity.setCourier(courierEntity);
         packageEntity.setCourierAssignedAt(LocalDateTime.now());
         packageEntityRepository.save(packageEntity);
+    }
+
+    @Override
+    public List<Package> findPackagesOfCourier(Integer courierId) {
+        return packageEntityMapper.toDomain(packageEntityRepository.findByCourierId(courierId));
     }
 }
