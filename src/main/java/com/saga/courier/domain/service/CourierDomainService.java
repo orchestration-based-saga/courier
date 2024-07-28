@@ -8,6 +8,7 @@ import com.saga.courier.domain.out.CourierRepositoryApi;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class CourierDomainService implements CourierDomainServiceApi {
@@ -19,7 +20,7 @@ public class CourierDomainService implements CourierDomainServiceApi {
         if (!shipment.status().equals(ShipmentDomainStatus.CREATED)){
             return;
         }
-        Package aPackage = courierRepositoryApi.createPackage(shipment);
+        Package aPackage = courierRepositoryApi.upsertPackage(shipment);
         // assign courier (bulky)
         Courier courier;
         if (aPackage.product().bulky()) {
@@ -34,6 +35,18 @@ public class CourierDomainService implements CourierDomainServiceApi {
     @Override
     public List<Package> getPackagesForCourier(Integer courierId) {
         return courierRepositoryApi.findPackagesOfCourier(courierId);
+    }
+
+    @Override
+    public boolean updateStatus(String packageId, ShipmentDomainStatus status) {
+        Optional<Package> maybePackage = courierRepositoryApi.findPackageById(packageId);
+        if (maybePackage.isEmpty()) {
+            return false;
+        }
+        Package aPackage = maybePackage.get();
+        aPackage = aPackage.updateStatus(status);
+        courierRepositoryApi.upsertPackage(aPackage);
+        return true;
     }
 
     private Courier assignOneManDeliveryCourier() {

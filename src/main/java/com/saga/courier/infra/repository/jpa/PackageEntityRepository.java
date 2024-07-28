@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface PackageEntityRepository extends JpaRepository<PackageEntity, Integer> {
+public interface PackageEntityRepository extends JpaRepository<PackageEntity, String> {
 
     List<PackageEntity> findByCourierId(Integer id);
 }

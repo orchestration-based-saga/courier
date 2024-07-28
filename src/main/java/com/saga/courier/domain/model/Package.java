@@ -19,4 +19,8 @@ public record Package(
         return new Package(orderId, product, itemId, packageId, shipmentId, status, courier);
     }
 
+    public Package updateStatus(ShipmentDomainStatus status) {
+        return  new Package(orderId, product, itemId, packageId, shipmentId, status, courier);
+    }
+
 }

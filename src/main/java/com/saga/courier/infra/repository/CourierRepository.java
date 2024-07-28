@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -23,7 +24,7 @@ public class CourierRepository implements CourierRepositoryApi {
     private final CourierEntityMapper courierEntityMapper;
 
     @Override
-    public Package createPackage(Package shipment) {
+    public Package upsertPackage(Package shipment) {
         PackageEntity packageEntity = packageEntityMapper.toEntity(shipment);
         packageEntity = packageEntityRepository.save(packageEntity);
         return packageEntityMapper.toDomain(packageEntity);
@@ -41,5 +42,10 @@ public class CourierRepository implements CourierRepositoryApi {
     @Override
     public List<Package> findPackagesOfCourier(Integer courierId) {
         return packageEntityMapper.toDomain(packageEntityRepository.findByCourierId(courierId));
+    }
+
+    @Override
+    public Optional<Package> findPackageById(String packageId) {
+        return packageEntityRepository.findById(packageId).map(packageEntityMapper::toDomain);
     }
 }
