@@ -16,9 +16,7 @@ public interface PackageEntityMapper {
 
     ShipmentStatus toEntity(ShipmentDomainStatus status);
 
-    @Mapping(target = "courier", ignore = true)
     @Mapping(target = "shipmentStatus", source = "status")
-    @Mapping(target = "courierAssignedAt", ignore = true)
     PackageEntity toEntity(Package shipment);
 
     @Mapping(target = "status", source = "shipmentStatus")

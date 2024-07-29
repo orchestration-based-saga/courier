@@ -8,6 +8,8 @@ import com.saga.courier.domain.out.CourierRepositoryApi;
 import com.saga.courier.domain.out.ShipmentProducerApi;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,11 +22,15 @@ public class CourierDomainService implements CourierDomainServiceApi {
     @Override
     public void upsert(Package shipment) {
         Optional<Package> maybePackage = courierRepositoryApi.findByShipmentId(shipment.shipmentId());
-        if (maybePackage.isEmpty()){
+        if (maybePackage.isEmpty()) {
             assignCourierToShipment(shipment);
             return;
         }
         Package aPackage = maybePackage.get();
+        if (isCourierAssignedMoreThan(aPackage, ChronoUnit.MINUTES, 2)) {
+            // reassign courier
+            assignCourierToShipment(aPackage);
+        }
         aPackage = aPackage.updateStatus(shipment.status());
         courierRepositoryApi.upsertPackage(aPackage);
     }
@@ -47,7 +53,7 @@ public class CourierDomainService implements CourierDomainServiceApi {
         return true;
     }
 
-    private void assignCourierToShipment(Package shipment){
+    private void assignCourierToShipment(Package shipment) {
         Package aPackage = courierRepositoryApi.upsertPackage(shipment);
         Courier courier;
         if (aPackage.product().bulky()) {
@@ -64,5 +70,11 @@ public class CourierDomainService implements CourierDomainServiceApi {
 
     private Courier assignTwoManDeliveryCourier() {
         return Courier.TWO_MEN_DELIVERY;
+    }
+
+    private boolean isCourierAssignedMoreThan(Package pack, ChronoUnit unit, Integer amount) {
+        return pack.courier() != null &&
+                pack.status().equals(ShipmentDomainStatus.IN_DELIVERY) &&
+                unit.between(pack.courierAssignedAt(), LocalDateTime.now()) >= amount;
     }
 }

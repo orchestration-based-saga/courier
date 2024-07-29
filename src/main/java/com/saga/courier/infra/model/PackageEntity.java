@@ -3,6 +3,8 @@ package com.saga.courier.infra.model;
 import com.saga.courier.infra.model.enums.ShipmentStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EntityListeners(AuditingEntityListener.class)
 public class PackageEntity {
 
     @Id
@@ -27,5 +30,6 @@ public class PackageEntity {
     @OneToOne
     @JoinColumn(name = "merchant_inventory_id", referencedColumnName = "merchant_inventory_id")
     MerchantProductEntity product;
+    @LastModifiedDate
     LocalDateTime courierAssignedAt;
 }

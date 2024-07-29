@@ -19,6 +19,7 @@ public interface PackageMapper {
     @Mapping(target = "shipmentId", source = "id")
     @Mapping(target = "product", source = "merchantInventoryId", qualifiedByName = "linkProduct")
     @Mapping(target = "courier", ignore = true)
+    @Mapping(target = "courierAssignedAt", ignore = true)
     Package fromMessage(ShipmentRequest shipmentRequest);
 
     @Named("linkProduct")

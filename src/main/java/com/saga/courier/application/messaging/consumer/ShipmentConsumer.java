@@ -20,7 +20,6 @@ public class ShipmentConsumer {
     @Bean
     public Consumer<Message<ShipmentRequest>> shipment() {
         return msg -> {
-            // update shipment for other statuses
             courierDomainServiceApi.upsert(packageMapper.fromMessage(msg.getPayload()));
         };
     }

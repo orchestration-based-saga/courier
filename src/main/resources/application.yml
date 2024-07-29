@@ -2,7 +2,7 @@ spring:
   application:
     name: courier
   datasource:
-    url: jdbc:postgresql://localhost:5431/courierdb
+    url: jdbc:postgresql://localhost:5436/courierdb
     password: postgres
     username: postgres
   cloud:
