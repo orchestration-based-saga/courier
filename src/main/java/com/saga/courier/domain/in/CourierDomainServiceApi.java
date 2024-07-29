@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CourierDomainServiceApi {
 
-    void assignCourierToShipment(Package shipment);
+    void upsert(Package shipment);
 
     List<Package> getPackagesForCourier(Integer courierId);
 

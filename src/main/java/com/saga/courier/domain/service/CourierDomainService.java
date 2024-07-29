@@ -18,20 +18,15 @@ public class CourierDomainService implements CourierDomainServiceApi {
     private final ShipmentProducerApi shipmentProducerApi;
 
     @Override
-    public void assignCourierToShipment(Package shipment) {
-        if (!shipment.status().equals(ShipmentDomainStatus.CREATED)){
+    public void upsert(Package shipment) {
+        Optional<Package> maybePackage = courierRepositoryApi.findByShipmentId(shipment.shipmentId());
+        if (maybePackage.isEmpty()){
+            assignCourierToShipment(shipment);
             return;
         }
-        Package aPackage = courierRepositoryApi.upsertPackage(shipment);
-        // assign courier (bulky)
-        Courier courier;
-        if (aPackage.product().bulky()) {
-            courier = assignOneManDeliveryCourier();
-        } else {
-            courier = assignTwoManDeliveryCourier();
-        }
-        courierRepositoryApi.assignCourier(aPackage, courier);
-
+        Package aPackage = maybePackage.get();
+        aPackage = aPackage.updateStatus(shipment.status());
+        courierRepositoryApi.upsertPackage(aPackage);
     }
 
     @Override
@@ -50,6 +45,17 @@ public class CourierDomainService implements CourierDomainServiceApi {
         courierRepositoryApi.upsertPackage(aPackage);
         shipmentProducerApi.updateShipment(aPackage);
         return true;
+    }
+
+    private void assignCourierToShipment(Package shipment){
+        Package aPackage = courierRepositoryApi.upsertPackage(shipment);
+        Courier courier;
+        if (aPackage.product().bulky()) {
+            courier = assignOneManDeliveryCourier();
+        } else {
+            courier = assignTwoManDeliveryCourier();
+        }
+        courierRepositoryApi.assignCourier(aPackage, courier);
     }
 
     private Courier assignOneManDeliveryCourier() {

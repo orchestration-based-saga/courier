@@ -15,4 +15,6 @@ public interface CourierRepositoryApi {
     List<Package> findPackagesOfCourier(Integer courierId);
 
     Optional<Package> findPackageById(String packageId);
+
+    Optional<Package> findByShipmentId(Integer shipmentId);
 }

@@ -48,4 +48,9 @@ public class CourierRepository implements CourierRepositoryApi {
     public Optional<Package> findPackageById(String packageId) {
         return packageEntityRepository.findById(packageId).map(packageEntityMapper::toDomain);
     }
+
+    @Override
+    public Optional<Package> findByShipmentId(Integer shipmentId) {
+        return packageEntityRepository.findByShipmentId(shipmentId).map(packageEntityMapper::toDomain);
+    }
 }
