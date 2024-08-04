@@ -1,8 +1,7 @@
 package com.saga.courier.application.controller;
 
-import com.saga.courier.application.controller.api.request.UpdateStatusRequest;
-import com.saga.courier.application.controller.api.response.PackageResponse;
-import com.saga.courier.application.messaging.api.enums.ShipmentState;
+import com.saga.courier.application.api.request.UpdateStatusRequest;
+import com.saga.courier.application.api.response.PackageResponse;
 import com.saga.courier.application.service.CourierService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

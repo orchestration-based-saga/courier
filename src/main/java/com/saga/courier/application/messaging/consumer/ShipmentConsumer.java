@@ -1,7 +1,7 @@
 package com.saga.courier.application.messaging.consumer;
 
 import com.saga.courier.application.mapper.PackageMapper;
-import com.saga.courier.application.messaging.api.ShipmentRequest;
+import com.saga.courier.application.api.event.ShipmentMessage;
 import com.saga.courier.domain.in.CourierDomainServiceApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +18,7 @@ public class ShipmentConsumer {
     private final PackageMapper packageMapper;
 
     @Bean
-    public Consumer<Message<ShipmentRequest>> shipment() {
+    public Consumer<Message<ShipmentMessage>> shipment() {
         return msg -> {
             courierDomainServiceApi.upsert(packageMapper.fromMessage(msg.getPayload()));
         };

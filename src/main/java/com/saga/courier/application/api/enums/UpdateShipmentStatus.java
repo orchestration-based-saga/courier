@@ -1,4 +1,4 @@
-package com.saga.courier.application.messaging.api.enums;
+package com.saga.courier.application.api.enums;
 
 public record UpdateShipmentStatus(
         String packageId,

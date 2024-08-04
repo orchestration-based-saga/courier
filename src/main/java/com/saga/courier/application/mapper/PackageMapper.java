@@ -1,9 +1,9 @@
 package com.saga.courier.application.mapper;
 
-import com.saga.courier.application.controller.api.response.PackageResponse;
-import com.saga.courier.application.messaging.api.enums.UpdateShipmentStatus;
-import com.saga.courier.application.messaging.api.ShipmentRequest;
-import com.saga.courier.application.messaging.api.enums.ShipmentState;
+import com.saga.courier.application.api.response.PackageResponse;
+import com.saga.courier.application.api.enums.UpdateShipmentStatus;
+import com.saga.courier.application.api.event.ShipmentMessage;
+import com.saga.courier.application.api.enums.ShipmentState;
 import com.saga.courier.domain.model.Package;
 import com.saga.courier.domain.model.Product;
 import com.saga.courier.domain.model.enums.ShipmentDomainStatus;
@@ -20,7 +20,7 @@ public interface PackageMapper {
     @Mapping(target = "product", source = "merchantInventoryId", qualifiedByName = "linkProduct")
     @Mapping(target = "courier", ignore = true)
     @Mapping(target = "courierAssignedAt", ignore = true)
-    Package fromMessage(ShipmentRequest shipmentRequest);
+    Package fromMessage(ShipmentMessage shipmentMessage);
 
     @Named("linkProduct")
     default Product linkProduct(Integer merchantInventoryId) {
