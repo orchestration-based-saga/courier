@@ -1,7 +1,6 @@
-package com.saga.courier.application.messaging;
+package com.saga.courier.application.messaging.producer;
 
 import com.saga.courier.application.mapper.PackageMapper;
-import com.saga.courier.application.messaging.api.ShipmentRequest;
 import com.saga.courier.domain.model.Package;
 import com.saga.courier.domain.out.ShipmentProducerApi;
 import com.saga.courier.infra.common.event.StreamBindingConstants;
