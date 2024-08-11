@@ -1,8 +1,10 @@
 package com.saga.courier.application.messaging.consumer;
 
+import com.saga.courier.application.api.event.ItemServicingProcessRequest;
 import com.saga.courier.application.mapper.PackageMapper;
-import com.saga.courier.application.api.event.ShipmentMessage;
 import com.saga.courier.domain.in.CourierDomainServiceApi;
+import com.saga.courier.domain.model.ItemServicingRequest;
+import com.saga.courier.domain.model.Package;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
@@ -18,9 +20,12 @@ public class ShipmentConsumer {
     private final PackageMapper packageMapper;
 
     @Bean
-    public Consumer<Message<ShipmentMessage>> shipment() {
+    public Consumer<Message<ItemServicingProcessRequest>> shipmentCreated() {
         return msg -> {
-            courierDomainServiceApi.upsert(packageMapper.fromMessage(msg.getPayload()));
+            ItemServicingProcessRequest request = msg.getPayload();
+            ItemServicingRequest itemServicingRequest = packageMapper.toItemServicingRequest(request);
+            Package shipment = packageMapper.fromMessage(request.claim());
+            courierDomainServiceApi.upsert(shipment, itemServicingRequest);
         };
     }
 }

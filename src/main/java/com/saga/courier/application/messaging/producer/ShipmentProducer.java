@@ -1,6 +1,8 @@
 package com.saga.courier.application.messaging.producer;
 
+import com.saga.courier.application.api.event.ItemServicingProcessResponse;
 import com.saga.courier.application.mapper.PackageMapper;
+import com.saga.courier.domain.model.ItemServicingRequest;
 import com.saga.courier.domain.model.Package;
 import com.saga.courier.domain.out.ShipmentProducerApi;
 import com.saga.courier.infra.common.event.StreamBindingConstants;
@@ -17,10 +19,14 @@ public class ShipmentProducer implements ShipmentProducerApi {
     private final PackageMapper packageMapper;
 
     @Override
-    public void updateShipment(Package pack) {
-        streamBridge.send(StreamBindingConstants.UPDATE_SHIPMENT_STATUS, MessageBuilder.withPayload(
-                packageMapper.toMessage(pack.packageId(), pack.status())
-        ).build()
+    public void updateShipment(Package pack, ItemServicingRequest request) {
+        ItemServicingProcessResponse response = new ItemServicingProcessResponse(
+                request.processId(),
+                request.businessKey(),
+                packageMapper.toMessage(pack)
+        );
+        streamBridge.send(StreamBindingConstants.UPDATE_SHIPMENT_STATUS,
+                MessageBuilder.withPayload(response).build()
         );
     }
 }

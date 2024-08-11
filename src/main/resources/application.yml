@@ -7,7 +7,7 @@ spring:
     username: postgres
   cloud:
     function:
-      definition: shipment;updateShipment
+      definition: shipmentCreated;updateShipment
     config:
       enable: true
     stream:
@@ -32,10 +32,10 @@ spring:
             buffer.memory: 33554432
             linger.ms: 1
       bindings:
-        shipment-in-0:
-          destination: shipment
+        shipmentCreated-in-0:
+          destination: workflow-shipment-create-response
           content-type: application/json
           group: courier-group
         updateShipment-out-0:
-          destination: shipment_status
+          destination: workflow-courier-create-response
           content-type: application/json

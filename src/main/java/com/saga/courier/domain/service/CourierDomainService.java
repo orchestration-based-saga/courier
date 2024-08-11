@@ -1,6 +1,7 @@
 package com.saga.courier.domain.service;
 
 import com.saga.courier.domain.in.CourierDomainServiceApi;
+import com.saga.courier.domain.model.ItemServicingRequest;
 import com.saga.courier.domain.model.Package;
 import com.saga.courier.domain.model.enums.Courier;
 import com.saga.courier.domain.model.enums.ShipmentDomainStatus;
@@ -20,10 +21,11 @@ public class CourierDomainService implements CourierDomainServiceApi {
     private final ShipmentProducerApi shipmentProducerApi;
 
     @Override
-    public void upsert(Package shipment) {
+    public void upsert(Package shipment, ItemServicingRequest request) {
         Optional<Package> maybePackage = courierRepositoryApi.findByShipmentId(shipment.shipmentId());
         if (maybePackage.isEmpty()) {
             assignCourierToShipment(shipment);
+            shipmentProducerApi.updateShipment(shipment, request);
             return;
         }
         Package aPackage = maybePackage.get();
@@ -32,7 +34,8 @@ public class CourierDomainService implements CourierDomainServiceApi {
             assignCourierToShipment(aPackage);
         }
         aPackage = aPackage.updateStatus(shipment.status());
-        courierRepositoryApi.upsertPackage(aPackage);
+        aPackage = courierRepositoryApi.upsertPackage(aPackage);
+        shipmentProducerApi.updateShipment(aPackage, request);
     }
 
     @Override
@@ -49,7 +52,8 @@ public class CourierDomainService implements CourierDomainServiceApi {
         Package aPackage = maybePackage.get();
         aPackage = aPackage.updateStatus(status);
         courierRepositoryApi.upsertPackage(aPackage);
-        shipmentProducerApi.updateShipment(aPackage);
+        // todo replace with producer to orchestrator
+//        shipmentProducerApi.updateShipment(aPackage);
         return true;
     }
 

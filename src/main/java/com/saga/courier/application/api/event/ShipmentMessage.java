@@ -5,7 +5,7 @@ import com.saga.courier.application.api.enums.ShipmentState;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record ShipmentMessage(
-        Integer id,
+        Integer shipmentId,
         String orderId,
         Integer merchantInventoryId,
         Integer itemId,
