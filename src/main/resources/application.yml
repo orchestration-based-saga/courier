@@ -37,5 +37,5 @@ spring:
           content-type: application/json
           group: courier-group
         updateShipment-out-0:
-          destination: workflow-courier-create-response
+          destination: workflow-courier-assign-response
           content-type: application/json

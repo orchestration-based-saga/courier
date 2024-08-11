@@ -9,8 +9,6 @@ import com.saga.courier.domain.out.CourierRepositoryApi;
 import com.saga.courier.domain.out.ShipmentProducerApi;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,16 +24,14 @@ public class CourierDomainService implements CourierDomainServiceApi {
         if (maybePackage.isEmpty()) {
             assignCourierToShipment(shipment);
             shipmentProducerApi.updateShipment(shipment, request);
-            return;
-        }
-        Package aPackage = maybePackage.get();
-        if (isCourierAssignedMoreThan(aPackage, ChronoUnit.MINUTES, 2)) {
+        } else {
+            Package aPackage = maybePackage.get();
             // reassign courier
             assignCourierToShipment(aPackage);
+            aPackage = aPackage.updateStatus(shipment.status());
+            aPackage = courierRepositoryApi.upsertPackage(aPackage);
+            shipmentProducerApi.updateShipment(aPackage, request);
         }
-        aPackage = aPackage.updateStatus(shipment.status());
-        aPackage = courierRepositoryApi.upsertPackage(aPackage);
-        shipmentProducerApi.updateShipment(aPackage, request);
     }
 
     @Override
@@ -52,8 +48,6 @@ public class CourierDomainService implements CourierDomainServiceApi {
         Package aPackage = maybePackage.get();
         aPackage = aPackage.updateStatus(status);
         courierRepositoryApi.upsertPackage(aPackage);
-        // todo replace with producer to orchestrator
-//        shipmentProducerApi.updateShipment(aPackage);
         return true;
     }
 
@@ -74,11 +68,5 @@ public class CourierDomainService implements CourierDomainServiceApi {
 
     private Courier assignTwoManDeliveryCourier() {
         return Courier.TWO_MEN_DELIVERY;
-    }
-
-    private boolean isCourierAssignedMoreThan(Package pack, ChronoUnit unit, Integer amount) {
-        return pack.courier() != null &&
-                pack.status().equals(ShipmentDomainStatus.IN_DELIVERY) &&
-                unit.between(pack.courierAssignedAt(), LocalDateTime.now()) >= amount;
     }
 }

@@ -18,12 +18,8 @@ public record Package(
         LocalDateTime courierAssignedAt
 ) {
 
-    public Package assignCourier(Courier courier) {
-        return new Package(orderId, product, itemId, packageId, shipmentId, status, courier, courierAssignedAt);
-    }
-
     public Package updateStatus(ShipmentDomainStatus status) {
-        return  new Package(orderId, product, itemId, packageId, shipmentId, status, courier, courierAssignedAt);
+        return new Package(orderId, product, itemId, packageId, shipmentId, status, courier, courierAssignedAt);
     }
 
 }
