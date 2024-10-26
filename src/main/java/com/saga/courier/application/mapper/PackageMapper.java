@@ -4,6 +4,7 @@ import com.saga.courier.application.api.enums.ShipmentState;
 import com.saga.courier.application.api.enums.UpdateShipmentStatus;
 import com.saga.courier.application.api.event.ItemServicingProcessRequest;
 import com.saga.courier.application.api.event.ShipmentMessage;
+import com.saga.courier.application.api.event.ShipmentProcessMessage;
 import com.saga.courier.application.api.response.PackageResponse;
 import com.saga.courier.domain.model.ItemServicingRequest;
 import com.saga.courier.domain.model.Package;
@@ -40,6 +41,8 @@ public interface PackageMapper {
     UpdateShipmentStatus toMessage(String packageId, ShipmentDomainStatus domainStatus);
 
     ItemServicingRequest toItemServicingRequest(ItemServicingProcessRequest request);
+
+    ItemServicingRequest toItemServicingRequest(ShipmentProcessMessage request);
 
     @Mapping(target = "merchantInventoryId", source = "product.merchantInventoryId")
     ShipmentMessage toMessage(Package shipment);

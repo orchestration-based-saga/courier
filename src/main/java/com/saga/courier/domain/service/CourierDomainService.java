@@ -7,6 +7,7 @@ import com.saga.courier.domain.model.enums.Courier;
 import com.saga.courier.domain.model.enums.ShipmentDomainStatus;
 import com.saga.courier.domain.out.CourierRepositoryApi;
 import com.saga.courier.domain.out.ShipmentProducerApi;
+import com.saga.courier.domain.out.WarehouseClientApi;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class CourierDomainService implements CourierDomainServiceApi {
 
     private final CourierRepositoryApi courierRepositoryApi;
     private final ShipmentProducerApi shipmentProducerApi;
+    private final WarehouseClientApi warehouseClient;
 
     @Override
     public void upsert(Package shipment, ItemServicingRequest request) {
@@ -60,6 +62,19 @@ public class CourierDomainService implements CourierDomainServiceApi {
             courier = assignTwoManDeliveryCourier();
         }
         courierRepositoryApi.assignCourier(aPackage, courier);
+    }
+
+    @Override
+    public void notifyWarehouse(Integer shipmentId, ItemServicingRequest request) {
+        Optional<Package> maybePackage = courierRepositoryApi.findByShipmentId(shipmentId);
+        if (maybePackage.isPresent() && warehouseClient.notifyOfIncomingDelivery(maybePackage.get())){
+            // send success response
+            shipmentProducerApi.warehouseNotified(true, request);
+        }
+        else {
+            // send unsuccessful response
+            shipmentProducerApi.warehouseNotified(false, request);
+        }
     }
 
     private Courier assignOneManDeliveryCourier() {

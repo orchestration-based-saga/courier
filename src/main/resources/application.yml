@@ -39,3 +39,7 @@ spring:
         updateShipment-out-0:
           destination: workflow-courier-assign-response
           content-type: application/json
+        notifyWarehouse-in-0:
+          destination: workflow-courier-notify-warehouse-request
+          content-type: application/json
+          group: courier-group

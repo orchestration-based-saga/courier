@@ -6,4 +6,6 @@ import com.saga.courier.domain.model.Package;
 public interface ShipmentProducerApi {
 
     void updateShipment(Package pack, ItemServicingRequest request);
+
+    void warehouseNotified(boolean success, ItemServicingRequest request);
 }

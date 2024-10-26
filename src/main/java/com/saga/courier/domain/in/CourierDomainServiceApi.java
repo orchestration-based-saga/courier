@@ -13,4 +13,6 @@ public interface CourierDomainServiceApi {
     List<Package> getPackagesForCourier(Integer courierId);
 
     boolean updateStatus(String packageId, ShipmentDomainStatus status);
+
+    void notifyWarehouse(Integer shipmentId, ItemServicingRequest request);
 }

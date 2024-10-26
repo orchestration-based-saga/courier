@@ -1,6 +1,7 @@
 package com.saga.courier.application.messaging.producer;
 
 import com.saga.courier.application.api.event.ItemServicingProcessResponse;
+import com.saga.courier.application.api.event.NotifyWarehouseProcessResponse;
 import com.saga.courier.application.mapper.PackageMapper;
 import com.saga.courier.domain.model.ItemServicingRequest;
 import com.saga.courier.domain.model.Package;
@@ -26,6 +27,18 @@ public class ShipmentProducer implements ShipmentProducerApi {
                 packageMapper.toMessage(pack)
         );
         streamBridge.send(StreamBindingConstants.UPDATE_SHIPMENT_STATUS,
+                MessageBuilder.withPayload(response).build()
+        );
+    }
+
+    @Override
+    public void warehouseNotified(boolean success, ItemServicingRequest request) {
+        NotifyWarehouseProcessResponse response = new NotifyWarehouseProcessResponse(
+                request.processId(),
+                request.businessKey(),
+                success
+        );
+        streamBridge.send(StreamBindingConstants.WAREHOUSE_NOTIFIED,
                 MessageBuilder.withPayload(response).build()
         );
     }
