@@ -33,7 +33,7 @@ spring:
             linger.ms: 1
       bindings:
         shipmentCreated-in-0:
-          destination: workflow-shipment-create-response
+          destination: workflow-courier-assign-request
           content-type: application/json
           group: courier-group
         updateShipment-out-0:
@@ -43,3 +43,4 @@ spring:
           destination: workflow-courier-notify-warehouse-request
           content-type: application/json
           group: courier-group
+http.client.warehouse.url: localhost:8087/api/v1/warehouse-management-system

@@ -56,7 +56,7 @@ public class CourierDomainService implements CourierDomainServiceApi {
     private void assignCourierToShipment(Package shipment) {
         Package aPackage = courierRepositoryApi.upsertPackage(shipment);
         Courier courier;
-        if (aPackage.product().bulky()) {
+        if (Boolean.TRUE.equals(aPackage.product().bulky())) {
             courier = assignOneManDeliveryCourier();
         } else {
             courier = assignTwoManDeliveryCourier();
