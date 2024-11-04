@@ -7,7 +7,7 @@ spring:
     username: postgres
   cloud:
     function:
-      definition: shipmentCreated;updateShipment
+      definition: shipmentCreated;updateShipment;warehouseNotified;
     config:
       enable: true
     stream:
@@ -43,4 +43,7 @@ spring:
           destination: workflow-courier-notify-warehouse-request
           content-type: application/json
           group: courier-group
+        warehouseNotified-out-0:
+          destination: workflow-courier-notify-warehouse-response
+          content-type: application/json
 http.client.warehouse.url: localhost:8087/api/v1/warehouse-management-system
