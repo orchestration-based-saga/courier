@@ -24,12 +24,12 @@ public class CourierDomainService implements CourierDomainServiceApi {
     public void upsert(Package shipment, ItemServicingRequest request) {
         Optional<Package> maybePackage = courierRepositoryApi.findByShipmentId(shipment.shipmentId());
         if (maybePackage.isEmpty()) {
-            assignCourierToShipment(shipment);
+            shipment = assignCourierToShipment(shipment);
             shipmentProducerApi.updateShipment(shipment, request);
         } else {
             Package aPackage = maybePackage.get();
             // reassign courier
-            assignCourierToShipment(aPackage);
+            shipment = assignCourierToShipment(aPackage);
             aPackage = aPackage.updateStatus(shipment.status());
             aPackage = courierRepositoryApi.upsertPackage(aPackage);
             shipmentProducerApi.updateShipment(aPackage, request);
@@ -53,7 +53,7 @@ public class CourierDomainService implements CourierDomainServiceApi {
         return true;
     }
 
-    private void assignCourierToShipment(Package shipment) {
+    private Package assignCourierToShipment(Package shipment) {
         Package aPackage = courierRepositoryApi.upsertPackage(shipment);
         Courier courier;
         if (Boolean.TRUE.equals(aPackage.product().bulky())) {
@@ -62,6 +62,7 @@ public class CourierDomainService implements CourierDomainServiceApi {
             courier = assignTwoManDeliveryCourier();
         }
         courierRepositoryApi.assignCourier(aPackage, courier);
+        return aPackage;
     }
 
     @Override

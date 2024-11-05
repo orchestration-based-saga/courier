@@ -7,7 +7,7 @@ spring:
     username: postgres
   cloud:
     function:
-      definition: shipmentCreated;updateShipment;warehouseNotified;
+      definition: shipmentCreated;updateShipment;warehouseNotified;notifyWarehouse;
     config:
       enable: true
     stream:
