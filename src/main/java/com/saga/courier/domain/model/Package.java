@@ -15,11 +15,12 @@ public record Package(
         Integer shipmentId,
         ShipmentDomainStatus status,
         Courier courier,
-        LocalDateTime courierAssignedAt
+        LocalDateTime courierAssignedAt,
+        Integer merchantInventoryId
 ) {
 
     public Package updateStatus(ShipmentDomainStatus status) {
-        return new Package(orderId, product, itemId, packageId, shipmentId, status, courier, courierAssignedAt);
+        return new Package(orderId, product, itemId, packageId, shipmentId, status, courier, courierAssignedAt, merchantInventoryId);
     }
 
 }
