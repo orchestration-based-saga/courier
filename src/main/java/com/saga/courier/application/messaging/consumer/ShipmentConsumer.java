@@ -1,6 +1,7 @@
 package com.saga.courier.application.messaging.consumer;
 
 import com.saga.courier.application.api.event.ItemServicingProcessRequest;
+import com.saga.courier.application.api.event.ShipmentMessage;
 import com.saga.courier.application.api.event.ShipmentProcessMessage;
 import com.saga.courier.application.mapper.PackageMapper;
 import com.saga.courier.domain.in.CourierDomainServiceApi;
@@ -36,6 +37,14 @@ public class ShipmentConsumer {
             ShipmentProcessMessage request = msg.getPayload();
             ItemServicingRequest itemServicingRequest = packageMapper.toItemServicingRequest(request);
             courierDomainServiceApi.notifyWarehouse(request.shipmentId(), itemServicingRequest);
+        };
+    }
+
+    @Bean
+    public Consumer<Message<ShipmentMessage>> shipment() {
+        return msg -> {
+            var message = msg.getPayload();
+            courierDomainServiceApi.updateStatus(message.packageId(), packageMapper.fromMessage(message.status()));
         };
     }
 }

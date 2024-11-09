@@ -18,7 +18,6 @@ public interface PackageEntityMapper {
     ShipmentStatus toEntity(ShipmentDomainStatus status);
 
     @Mapping(target = "shipmentStatus", source = "status")
-    @Mapping(target = "packageId", source = "shipmentId")
     PackageEntity toEntity(Package shipment);
 
     @Mapping(target = "status", source = "shipmentStatus")

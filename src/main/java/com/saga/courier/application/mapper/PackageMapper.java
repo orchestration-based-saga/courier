@@ -22,6 +22,7 @@ public interface PackageMapper {
     @Mapping(target = "product", source = "merchantInventoryId", qualifiedByName = "linkProduct")
     @Mapping(target = "courier", ignore = true)
     @Mapping(target = "courierAssignedAt", ignore = true)
+    @Mapping(target = "status", qualifiedByName = "mapStatusToDomain")
     Package fromMessage(ShipmentMessage claim);
 
     @Named("linkProduct")
@@ -33,9 +34,12 @@ public interface PackageMapper {
 
     List<PackageResponse> toResponse(List<Package> aPackage);
 
+    @Named("mapStatusToDomain")
     ShipmentDomainStatus toDomain(ShipmentState state);
 
     ShipmentState toMessage(ShipmentDomainStatus status);
+
+    ShipmentDomainStatus fromMessage(ShipmentState status);
 
     @Mapping(target = "status", source = "domainStatus")
     UpdateShipmentStatus toMessage(String packageId, ShipmentDomainStatus domainStatus);
