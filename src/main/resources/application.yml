@@ -50,4 +50,4 @@ spring:
           destination: shipment
           content-type: application/json
           group: courier-group
-http.client.warehouse.url: localhost:8080/api/v1/warehouse-management-system
+http.client.warehouse.url: localhost:8087/api/v1/warehouse-management-system

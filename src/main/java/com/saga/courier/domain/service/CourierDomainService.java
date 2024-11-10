@@ -32,6 +32,7 @@ public class CourierDomainService implements CourierDomainServiceApi {
             shipment = assignCourierToShipment(aPackage);
             aPackage = aPackage.updateStatus(shipment.status());
             aPackage = courierRepositoryApi.upsertPackage(aPackage);
+            warehouseClient.deliverPackage(aPackage);
             shipmentProducerApi.updateShipment(aPackage, request);
         }
     }

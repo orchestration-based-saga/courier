@@ -37,4 +37,5 @@ public interface PackageEntityMapper {
 
     @Mapping(target = "courier", expression = "java(pack.courier().getName())")
     PackageRequest toRequest(Package pack);
+
 }

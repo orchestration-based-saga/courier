@@ -6,4 +6,6 @@ public interface WarehouseClientApi {
 
     boolean notifyOfIncomingDelivery(Package shipment);
 
+    void deliverPackage(Package shipment);
+
 }
